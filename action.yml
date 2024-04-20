@@ -66,7 +66,9 @@ runs:
         run_id: ${{ inputs.workflow_run_id }}
 
     - name: Deploy to Cloudflare
-      run: bash ../../_actions/ubiquity/cloudflare-deploy-action/main/.github/cloudflare-deploy.sh "${{ inputs.repository }}" "${{ inputs.production_branch }}" "${{ inputs.output_directory }}" "${{ fromJSON(steps.pr.outputs.result).forcePreviewDeploy && format('{0}/{1}', github.repository_owner, inputs.current_branch) || inputs.current_branch }}"
+      run: |
+        bash ../../_actions/ubiquity/cloudflare-deploy-action/main/.github/cloudflare-deploy.sh "${{ inputs.repository }}" "${{ inputs.production_branch }}" "${{ inputs.output_directory }}" "${{ fromJSON(steps.pr.outputs.result).forcePreviewDeploy && format('{0}/{1}', github.repository_owner, inputs.current_branch) || inputs.current_branch }}"
+        echo "::set-output name=deployment_url::${{ env.DEPLOYMENT_URL }}"
       shell: bash
       env:
         CLOUDFLARE_ACCOUNT_ID: ${{ inputs.cloudflare_account_id }}
